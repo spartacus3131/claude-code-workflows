@@ -23,6 +23,20 @@ A practical guide to getting more out of Claude Code, based on [10 Tips from Ins
 
 ---
 
+## Real-World Example
+
+**See the skills in action**: [Company Fit Score](examples/company-fit-score.md)
+
+A full walkthrough showing how to turn "Create me a company fit score" into shipped code:
+1. `/vibe-pm` generates an unambiguous spec from the vague request
+2. `/elegant-redo` cleans up messy scoring logic mid-build
+3. `/grill` catches two bugs before the PR
+4. `/meta-rule` captures a lesson for future sessions
+
+Includes the actual TypeScript code that got shipped.
+
+---
+
 ## Getting Started
 
 ### 1. Install the Skills
