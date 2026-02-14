@@ -23,23 +23,7 @@ A practical guide to getting more out of Claude Code, based on [10 Tips from Ins
 
 ---
 
-## Real-World Example
-
-**See the skills in action**: [Company Fit Score](examples/company-fit-score.md)
-
-A full walkthrough showing how to turn "Create me a company fit score" into shipped code:
-1. `/vibe-pm` generates an unambiguous spec from the vague request
-2. `/elegant-redo` cleans up messy scoring logic mid-build
-3. `/grill` catches two bugs before the PR
-4. `/meta-rule` captures a lesson for future sessions
-
-Includes the actual TypeScript code that got shipped.
-
----
-
 ## Getting Started
-
-### 1. Install the Skills
 
 Copy the skills you want into your Claude config:
 
@@ -49,165 +33,26 @@ cp -r skills/* ~/.claude/skills/
 
 # Or copy specific ones
 cp -r skills/grill ~/.claude/skills/
-cp -r skills/meta-rule ~/.claude/skills/
 ```
 
-### 2. Use Them
-
-Skills are invoked with `/` commands:
-
-```
-/grill          # Quiz yourself before a PR
-/elegant-redo   # Scrap and rewrite elegantly
-/meta-rule      # Add a rule after a correction
-/parallel-session  # Analyze work for parallelization
-/techdebt       # Find code quality issues
-/vibe-pm        # Generate specs from vague ideas
-```
+Then invoke them with `/` commands in Claude Code.
 
 ---
 
-## Skills Overview
+## Skills
 
-### `/grill` - Pre-PR Quiz
-
-**Problem**: You're about to open a PR but you're not sure you understand all your changes.
-
-**Solution**: Claude acts as a senior engineer and quizzes you. You don't make a PR until you pass.
-
-```
-> /grill
-
-## Grill Session
-
-I've reviewed your changes to the checkout flow. 3 files changed, 127 additions.
-
-**Question 1 of 5**
-
-You added retry logic for payment failures. What happens if all 3 retries fail?
-Walk me through the user experience.
-```
-
-[Full skill documentation](skills/grill/SKILL.md)
-
----
-
-### `/elegant-redo` - Clean Rewrite
-
-**Problem**: Your code works but it's messy. You know there's a better way.
-
-**Solution**: Claude analyzes what's wrong, proposes an elegant approach, and rewrites from scratch.
-
-```
-> This checkout flow works but it's a mess. /elegant-redo
-
-## Current Implementation Analysis
-
-**Core problem**: Process a multi-step checkout
-**What's wrong**: State scattered across 4 useState hooks + localStorage
-**The insight**: This is a state machine. Use XState.
-
-This would replace 280 lines across 4 files with 120 lines in 2 files.
-Should I proceed?
-```
-
-[Full skill documentation](skills/elegant-redo/SKILL.md)
-
----
-
-### `/meta-rule` - Self-Improving Rules
-
-**Problem**: Claude keeps making the same mistake.
-
-**Solution**: After a correction, Claude writes a rule for itself in CLAUDE.md.
-
-```
-> You just used console.log for debugging. Don't do that, use the logger.
-> /meta-rule
-
-Added to CLAUDE.md:
-
-### Code Style
-- Use the project logger (`src/lib/logger.ts`) instead of `console.log`
-  - Context: All logging in production code
-  - Example: `logger.debug('user action', { userId })`
-
-This will apply to all future sessions in this project.
-```
-
-[Full skill documentation](skills/meta-rule/SKILL.md)
-
----
-
-### `/parallel-session` - Work Parallelization
-
-**Problem**: You have 10 features to build. Should you work on them one at a time?
-
-**Solution**: Claude analyzes your backlog and recommends how to split work across parallel branches.
-
-```
-> I have 14 features to build. /parallel-session
-
-## Parallelization Assessment
-
-**Recommend parallel** - 3 independent workstreams detected
-
-| Branch | Features | Domain |
-|--------|----------|--------|
-| auth-flow | F01, F02, F03 | Authentication |
-| dashboard | F04-F08 | Dashboard UI |
-| api-layer | F09-F14 | API endpoints |
-
-Setup commands:
-git worktree add ../project-auth auth-flow
-git worktree add ../project-dashboard dashboard
-git worktree add ../project-api api-layer
-```
-
-[Full skill documentation](skills/parallel-session/SKILL.md)
-
----
-
-### `/techdebt` - Code Quality Audit
-
-**Problem**: You suspect there's duplicated code, inconsistencies, or technical debt.
-
-**Solution**: Claude scans the codebase and reports issues.
-
-[Full skill documentation](skills/techdebt/SKILL.md)
-
----
-
-### `/vibe-pm` - Spec Generation
-
-**Problem**: You have a vague feature idea ("add a logout button") and Claude keeps asking clarifying questions.
-
-**Solution**: Claude makes smart inferences and generates an unambiguous spec instead of asking.
-
-```
-> Add a logout button
-
-## Logout Button
-
-**Outcome**: Users can log out from any page with one click.
-
-**Requirements**:
-- Logout button in header, right side
-- Clears auth token from localStorage and context
-- Redirects to /login
-
-**Assumptions Made**:
-- Using existing IconButton component (matches Header.tsx pattern)
-- Logout API endpoint is POST /api/auth/logout
-```
-
-[Full skill documentation](skills/vibe-pm/SKILL.md)
+| Skill | What it does |
+|-------|-------------|
+| [`/grill`](skills/grill/SKILL.md) | Quiz yourself on changes before making a PR. Claude acts as a senior engineer and you don't ship until you pass. |
+| [`/elegant-redo`](skills/elegant-redo/SKILL.md) | Scrap a messy implementation and redesign from scratch with everything you've learned. |
+| [`/meta-rule`](skills/meta-rule/SKILL.md) | After a correction, Claude writes a rule for itself in CLAUDE.md so the mistake doesn't happen again. |
+| [`/parallel-session`](skills/parallel-session/SKILL.md) | Analyze your backlog and recommend how to split work across parallel git worktrees. |
+| [`/techdebt`](skills/techdebt/SKILL.md) | Scan the codebase for duplicated code, inconsistencies, and technical debt. |
+| [`/vibe-pm`](skills/vibe-pm/SKILL.md) | Turn a vague feature idea into an unambiguous spec. Makes smart inferences instead of asking questions. |
 
 ---
 
 ## Walkthroughs
-
-Step-by-step guides for specific workflows:
 
 - [Plan Mode Recovery](walkthroughs/plan-mode-recovery.md) - What to do when you're stuck
 - [Debug Mode](walkthroughs/debug-mode.md) - Letting Claude fix its own bugs
@@ -217,8 +62,6 @@ Step-by-step guides for specific workflows:
 ---
 
 ## The Meta-Pattern
-
-These techniques share common principles:
 
 1. **Parallelize over optimize** - Run multiple sessions instead of perfecting one
 2. **Plan Mode as recovery** - Not just for starting, but for getting unstuck
@@ -233,7 +76,6 @@ These techniques share common principles:
 Found a workflow that works well? Open a PR with:
 - A new skill in `skills/`
 - A walkthrough in `walkthroughs/`
-- An example in `examples/`
 
 ---
 
